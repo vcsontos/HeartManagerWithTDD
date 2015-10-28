@@ -34,6 +34,7 @@ public class PatientFacade implements PatientFacadeLocal {
         }
     }
     
+    @Override
     public List<Patient> getAllPatients() {
         return createDummyPatients();
     }
