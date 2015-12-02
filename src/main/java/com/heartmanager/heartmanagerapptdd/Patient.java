@@ -6,6 +6,7 @@
 package com.heartmanager.heartmanagerapptdd;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -14,13 +15,13 @@ import java.util.Objects;
  * @author valentin
  */
 public class Patient {
-    
+
     private String taj;
     private String name;
     private Date dateOfBirth;
     private Sex sex;
     private Map<Integer, String> measurements;
-
+    
     public Patient(String taj) {
         this.taj = taj;
     }
@@ -71,6 +72,75 @@ public class Patient {
         this.measurements = measurements;
     }
 
+    public Map<Integer, String> getMeasurementsByYear(Integer y)
+            throws ArrayIndexOutOfBoundsException {
+
+        if (y < 1900 || y > 2015) {
+            throw new ArrayIndexOutOfBoundsException("Wrong year given!");
+        }
+
+        Map<Integer, String> filteredMeasurements = new HashMap<>();
+
+        for (Integer i : measurements.keySet()) {
+            String[] splittedData = measurements.get(i).split(" ");
+            String date = splittedData[0];
+            String[] splittedData2 = date.split("\\.", 3);
+            String year = splittedData2[0];
+
+            if (y.toString().equals(year)) {
+                filteredMeasurements.put(i, measurements.get(i));
+            }
+        }
+
+        return filteredMeasurements;
+    }
+
+    public Map<Integer, String> getMeasurementsByMonth(Integer m)
+            throws ArrayIndexOutOfBoundsException {
+
+        if (m < 1 || m > 12) {
+            throw new ArrayIndexOutOfBoundsException("Wrong month given!");
+        }
+
+        Map<Integer, String> filteredMeasurements = new HashMap<>();
+
+        for (Integer i : measurements.keySet()) {
+            String[] splittedData = measurements.get(i).split(" ");
+            String date = splittedData[0];
+            String[] splittedData2 = date.split("\\.", 3);
+            String month = splittedData2[1];
+
+            if (m.toString().equals(month)) {
+                filteredMeasurements.put(i, measurements.get(i));
+            }
+        }
+
+        return filteredMeasurements;
+    }
+
+    public Map<Integer, String> getMeasurementsByDay(Integer d)
+            throws ArrayIndexOutOfBoundsException {
+
+        if (d < 1 || d > 31) {
+            throw new ArrayIndexOutOfBoundsException("Wrong day given!");
+        }
+
+        Map<Integer, String> filteredMeasurements = new HashMap<>();
+
+        for (Integer i : measurements.keySet()) {
+            String[] splittedData = measurements.get(i).split(" ");
+            String date = splittedData[0];
+            String[] splittedData2 = date.split("\\.", 3);
+            String day = splittedData2[2];
+
+            if (d.toString().equals(day)) {
+                filteredMeasurements.put(i, measurements.get(i));
+            }
+        }
+
+        return filteredMeasurements;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -113,5 +183,5 @@ public class Patient {
     public String toString() {
         return "Patient{" + "taj=" + taj + ", name=" + name + ", dateOfBirth=" + dateOfBirth + ", sex=" + sex + ", measurements=" + measurements + '}';
     }
-    
+
 }

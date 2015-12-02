@@ -10,6 +10,7 @@ import com.heartmanager.heartmanagerapptdd.JeeApplicationException;
 import com.heartmanager.heartmanagerapptdd.Patient;
 import com.heartmanager.heartmanagerapptdd.PatientFacade;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -28,9 +29,11 @@ public class PatientFacadeTest {
     
     @Rule
     public final ExpectedException exception = ExpectedException.none();
+    public final ExpectedException exception1 = ExpectedException.none();
     
     PatientFacade patientFacade;
-    List<Patient> patients;
+    List<Patient> patients1;
+    List<Patient> patients2;
     
     public PatientFacadeTest() {
     }
@@ -46,7 +49,8 @@ public class PatientFacadeTest {
     @Before
     public void setUp() {
         patientFacade = new PatientFacade();
-        patients = PatientFacade.createDummyPatients();
+        patients1 = PatientFacade.createDummyPatients(false);
+        patients2 = PatientFacade.createDummyPatients(true);
     }
     
     @After
@@ -74,6 +78,31 @@ public class PatientFacadeTest {
     
     @Test
     public void whenGetAllPatientsThenReturnPatients() {
-        Assert.assertTrue(CollectionUtils.isEqualCollection(patients, patientFacade.getAllPatients()));
+        Assert.assertTrue(CollectionUtils.isEqualCollection(patients1, patientFacade.getAllPatients()));
+    }
+    
+    @Test
+    public void whenTajIsNotValid() throws JeeApplicationException {
+        exception1.expect(JeeApplicationException.class);
+        exception1.expectMessage(Constant.TAJ_IS_NOT_VALID);
+        patientFacade.validateTaj(" ");        
+    }
+    
+    @Test
+    public void whenTajIsValid() throws JeeApplicationException {
+        patientFacade.validateTaj("1");   
+    }
+    
+    @Test
+    public void whenPatientNotFound() throws JeeApplicationException {
+        exception.expect(JeeApplicationException.class);
+        exception.expectMessage(Constant.TAJ_IS_NOT_VALID);
+        patientFacade.existPatient("12");
+    }
+    
+    @Test
+    public void whenPatientFound() throws JeeApplicationException {
+        Map<Integer, String> measurements = patientFacade.existPatient("123451");
+        Assert.assertNotNull(measurements);
     }
 }

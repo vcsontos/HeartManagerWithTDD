@@ -6,6 +6,7 @@
 package com.heartmanager.heartmanagerapptdd;
 
 import java.util.List;
+import java.util.Map;
 import javax.ejb.Local;
 
 /**
@@ -16,4 +17,6 @@ import javax.ejb.Local;
 public interface PatientFacadeLocal {
     
     List<Patient> getAllPatients();
+    
+    Map<Integer, String> getAllMeasurementByTaj(String taj) throws JeeApplicationException;
 }
